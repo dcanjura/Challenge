@@ -1,0 +1,12 @@
+package Kodigo.challenge.Repository;
+
+import Kodigo.challenge.Model.Item;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findByItemStatusAndItemEnteredByUser(String itemS, String itemEBU);
+}
