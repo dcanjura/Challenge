@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+        /*http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             try {
@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        });
+        });*/
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
