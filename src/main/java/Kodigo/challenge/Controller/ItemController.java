@@ -17,12 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/app")
 public class ItemController {
-
-    String home(){
-        return "home";
-    }
 
     @Autowired
     private ItemRepository itemRepository;

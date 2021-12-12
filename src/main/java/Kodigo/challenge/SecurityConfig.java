@@ -2,6 +2,7 @@ package Kodigo.challenge;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,17 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.csrf().disable();
-        http.httpBasic();
-        http
-                .authorizeRequests()
-                .antMatchers(SWAGGER_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.GET).authenticated()
-                .antMatchers(HttpMethod.PUT).authenticated()
-                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        /*http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+        http.httpBasic().authenticationEntryPoint((request, response, ex) -> {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             try {
@@ -58,7 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        });*/
+        });
+        http
+                .authorizeRequests()
+                .antMatchers(SWAGGER_WHITELIST).permitAll()
+                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.PUT).hasAnyRole("ADMIN", "USER", "CLIENT")
+                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
